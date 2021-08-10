@@ -75,5 +75,19 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Production') {
+            when {
+                branch 'master'
+            }
+            steps {
+                script {
+                    PRODUCTION_ALB_LISTENER_ARN="arn:aws:elasticloadbalancing:ap-southeast-2:581251645584:listener/app/production-website/736542054cb9ffe8/b2c1e14a1b41024d"
+                    sh """
+                    ./run-stack.sh example-webapp-production ${PRODUCTION_ALB_LISTENER_ARN}
+                    """
+                }
+            }
+        }
     }
 }
